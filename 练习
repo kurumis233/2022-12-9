@@ -1,0 +1,76 @@
+CREATE VIEW IF NOT EXISTS view_bjxx_xsxx  (
+    bjbh,
+    bjmc,
+    rxrq,
+    yhbh,
+    xh,
+    xm,
+    xb
+)COMMENT '班级学生关联表'
+AS SELECT 
+    b.bjbh,
+    b.bjmc,
+    b.rxrq,
+    b.yhbh,
+    x.xh,
+    x.xm,
+    x.xb
+FROM bjxx b
+LEFT OUTER JOIN xsxx x
+    ON b.bjbh=x.bjbh
+;
+DESC view_bjxx_xsxx;
+CREATE OR  REPLACE  VIEW IF NOT EXISTS view_bjxx_xsxx  (
+    bjbh COMMENT '班级编号',
+    bjmc COMMENT '班级名称',
+    rxrq COMMENT '入学日期',
+    yhbh COMMENT '所属院系编号',
+    xh COMMENT '学号',
+    xm COMMENT '姓名',
+    xb COMMENT '性别'
+)COMMENT '班级学生关联表'
+AS SELECT 
+    b.bjbh,
+    b.bjmc,
+    b.rxrq,
+    b.yhbh,
+    x.xh,
+    x.xm,
+    x.xb
+FROM bjxx b
+LEFT OUTER JOIN xsxx x
+    ON b.bjbh=x.bjbh
+;
+DESC view_bjxx_xsxx;
+
+ALTER TABLE xsxx ADD COLUMNS(
+    rxcj BIGINT COMMENT'入学成绩',
+    syd STRING COMMENT'生源地'
+)；
+
+DESC xsxx;
+
+INSERT INTO TABLE xsxx VALUES (
+    '9211271028','孙德邻','女','2013101050703415','20131003',372,'沧州师范学院');
+INSERT INTO TABLE xsxx VALUES (
+    '9002211017','田普','男','2013101050703925','20131003',370,'衡水学院');
+
+SELECT * FROM xsxx;
+
+DESC xsxx ;
+
+INSERT INTO TABLE xsxx  
+VALUES('9108081022','单英杰','女','2013101050702923','20131005',366,'唐山师范学院');
+INSERT INTO TABLE xsxx 
+VALUES('9008216422','刘岩','男','2013101050703903','20131007',365,'河北农业大学');
+
+READ xsxx;
+
+SELECT syd,AVG(rxcj) AS avg_score FROM xsxx  GROUP BY syd;
+
+SELECT * FROM xsxx ORDER BY xh DESC LIMIT 5;
+
+SELECT x.xh,x.xm,x.xb,x.bjbh,x.rxrq,b.bjmc
+FROM xsxx x 
+INNER JOIN bjxx b 
+ON x.bjbh=b.bjbh;m
