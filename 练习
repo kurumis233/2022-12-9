@@ -1,4 +1,4 @@
-CREATE VIEW IF NOT EXISTS view_bjxx_xsxx  (
+CREATE VIEW IF NOT EXISTS view_bjxx_xsxx  (                                  //create 建立表   if not exists 如果不存在这个表名//
     bjbh,
     bjmc,
     rxrq,
@@ -6,7 +6,7 @@ CREATE VIEW IF NOT EXISTS view_bjxx_xsxx  (
     xh,
     xm,
     xb
-)COMMENT '班级学生关联表'
+)COMMENT '班级学生关联表'                                                 //comment 注释//
 AS SELECT 
     b.bjbh,
     b.bjmc,
@@ -16,11 +16,11 @@ AS SELECT
     x.xm,
     x.xb
 FROM bjxx b
-LEFT OUTER JOIN xsxx x
+LEFT OUTER JOIN xsxx x                      
     ON b.bjbh=x.bjbh
 ;
-DESC view_bjxx_xsxx;
-CREATE OR  REPLACE  VIEW IF NOT EXISTS view_bjxx_xsxx  (
+DESC view_bjxx_xsxx;                                                                 //desc降序排列 
+CREATE OR  REPLACE  VIEW IF NOT EXISTS view_bjxx_xsxx  (                         //create or replace 建立或替换一个表
     bjbh COMMENT '班级编号',
     bjmc COMMENT '班级名称',
     rxrq COMMENT '入学日期',
@@ -28,7 +28,7 @@ CREATE OR  REPLACE  VIEW IF NOT EXISTS view_bjxx_xsxx  (
     xh COMMENT '学号',
     xm COMMENT '姓名',
     xb COMMENT '性别'
-)COMMENT '班级学生关联表'
+)COMMENT '班级学生关联表'                                                                     // TRUNCATE TABLE  清空表的数据    DROP  删除表
 AS SELECT 
     b.bjbh,
     b.bjmc,
@@ -42,15 +42,15 @@ LEFT OUTER JOIN xsxx x
     ON b.bjbh=x.bjbh
 ;
 DESC view_bjxx_xsxx;
-
-ALTER TABLE xsxx ADD COLUMNS(
-    rxcj BIGINT COMMENT'入学成绩',
-    syd STRING COMMENT'生源地'
-)；
-
+        
+ALTER TABLE xsxx ADD COLUMNS(                                                    //ALTER TABLE xxx RENAME TO  修改某个表的表名
+    rxcj BIGINT COMMENT'入学成绩',                                                                   ADD COLUMNS  在某个表中添加某列数据
+    syd STRING COMMENT'生源地'                                                                        SET COMMENT/LIFECYCLE/TOUCH  修改表的注释/生命周期/最后修改表的时间
+)；                                                                                                  CHANGE COLUMN xxx RENAME TO xxx  修改列名
+                                                                                                        COMMENT  修改列注释
 DESC xsxx;
 
-INSERT INTO TABLE xsxx VALUES (
+INSERT INTO TABLE xsxx VALUES (                                               //INSTERT INTO TABLE 向表中添加  追加    INSTERT OVERWRITE TABLE 覆盖添加
     '9211271028','孙德邻','女','2013101050703415','20131003',372,'沧州师范学院');
 INSERT INTO TABLE xsxx VALUES (
     '9002211017','田普','男','2013101050703925','20131003',370,'衡水学院');
@@ -64,13 +64,16 @@ VALUES('9108081022','单英杰','女','2013101050702923','20131005',366,'唐山�
 INSERT INTO TABLE xsxx 
 VALUES('9008216422','刘岩','男','2013101050703903','20131007',365,'河北农业大学');
 
-READ xsxx;
+READ xsxx;                                                                            //READ 读取表的数据
 
-SELECT syd,AVG(rxcj) AS avg_score FROM xsxx  GROUP BY syd;
+SELECT syd,AVG(rxcj) AS avg_score FROM xsxx  GROUP BY syd;                            //GROUP BY  分组查询
+                                                                                       SELECT syd,AVG(rxcj) AS avg_score FROM xsxx  GROUP BY syd
+                                                                                      在xsxx中根据syd 分组，求rxcj的平均值，并命名为 avg_score 
 
-SELECT * FROM xsxx ORDER BY xh DESC LIMIT 5;
 
+SELECT * FROM xsxx ORDER BY xh DESC LIMIT 5;                                       //ORDER BY 按照某种规则排序
+                                                                                    //LIMIT 限制返回记录数
 SELECT x.xh,x.xm,x.xb,x.bjbh,x.rxrq,b.bjmc
 FROM xsxx x 
-INNER JOIN bjxx b 
-ON x.bjbh=b.bjbh;m
+INNER JOIN bjxx b                                                                      //需要使用等号，对两边比较关联的字段进行严格匹配
+ON x.bjbh=b.bjbh;m                                                                         INNER JOIN”连接时，返回左表和右表中能进行等值匹配的记录
